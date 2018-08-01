@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     public float maxMovementVelocity;
 
     bool jumpRequest = false;
+    List<Collider2D> groundTouched = new List<Collider2D>();
 
 
     void Awake()
@@ -33,6 +34,10 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.Z))
         {
             jumpRequest = true;
+        }
+        if(groundTouched.Count > 0)
+        {
+            JumpReset();
         }
     }
 
@@ -47,10 +52,6 @@ public class Player : MonoBehaviour
         {
             Jump();
             jumpRequest = false;
-        }
-        if (Input.GetKey(KeyCode.R))
-        {
-            Reset();
         }
         Move(Input.GetAxisRaw("Horizontal"));
     }
@@ -82,7 +83,7 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
-        if (actuallJumpHeight < maxJumpHeight)
+        if (actuallJumpHeight < maxJumpHeight && myRigidBody.velocity.y >= 0)
         {
             actuallJumpHeight += 1;
             myRigidBody.AddForce(new Vector2(0f, jumpYVelocity / actuallJumpHeight));
@@ -96,7 +97,7 @@ public class Player : MonoBehaviour
         else return true;
     }
 
-    private void Reset()
+    private void JumpReset()
     {
         actuallJumpHeight = 0;
         myRigidBody.gravityScale = 1;
@@ -104,5 +105,19 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        foreach(ContactPoint2D contactPoint in collision.contacts){
+            if (contactPoint.normal == Vector2.up && !groundTouched.Contains(collision.collider))
+            {
+                groundTouched.Add(collision.collider);
+                JumpReset();
+                return;
+            }
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (groundTouched.Contains(collision.collider))
+            groundTouched.Remove(collision.collider);
     }
 }

@@ -199,8 +199,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04b4db0e90e7eca4c8dd87d32402895a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpYVelocity: 120
-  maxJumpHeight: 7
+  jumpYVelocity: 90
+  maxJumpHeight: 9
   fallMultiplier: 3
   groundMovementVelocity: 50
   airMovementVelocity: 1
