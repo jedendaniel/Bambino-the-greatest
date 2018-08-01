@@ -199,9 +199,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04b4db0e90e7eca4c8dd87d32402895a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpYVelocity: 300
-  jumpRatioPerFrame: 1
-  maxJumpHeight: 20
+  jumpYVelocity: 120
+  maxJumpHeight: 7
+  fallMultiplier: 3
   groundMovementVelocity: 50
   airMovementVelocity: 1
   movementRatioPerFrame: 1
@@ -250,7 +250,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &1110171933
 GameObject:
   m_ObjectHideFlags: 0

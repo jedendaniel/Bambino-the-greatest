@@ -8,10 +8,10 @@ public class Player : MonoBehaviour
 
     Rigidbody2D myRigidBody;
 
-    public float jumpYVelocity = 300;
+    public float jumpYVelocity = 120;
+    public float maxJumpHeight = 7;
     float actuallJumpHeight = 0;
-    public float jumpRatioPerFrame = 1;
-    public float maxJumpHeight = 20;
+    public float fallMultiplier = 2.5f;
 
     public float groundMovementVelocity;
     public float airMovementVelocity;
@@ -20,7 +20,10 @@ public class Player : MonoBehaviour
     public float movementRatioPerFrame;
     public float maxMovementVelocity;
 
-    void Start()
+    bool jumpRequest = false;
+
+
+    void Awake()
     {
         myRigidBody = GetComponent<Rigidbody2D>();
     }
@@ -29,7 +32,21 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Z))
         {
+            jumpRequest = true;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (myRigidBody.velocity.y < 0)
+        {
+            myRigidBody.gravityScale = fallMultiplier;
+        }
+
+        if (jumpRequest)
+        {
             Jump();
+            jumpRequest = false;
         }
         if (Input.GetKey(KeyCode.R))
         {
@@ -67,10 +84,11 @@ public class Player : MonoBehaviour
     {
         if (actuallJumpHeight < maxJumpHeight)
         {
-            actuallJumpHeight += jumpRatioPerFrame;
-            myRigidBody.AddForce(new Vector2(0, jumpYVelocity / actuallJumpHeight));
+            actuallJumpHeight += 1;
+            myRigidBody.AddForce(new Vector2(0f, jumpYVelocity / actuallJumpHeight));
         }
     }
+
 
     private bool IsGrounded()
     {
@@ -81,6 +99,7 @@ public class Player : MonoBehaviour
     private void Reset()
     {
         actuallJumpHeight = 0;
+        myRigidBody.gravityScale = 1;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
