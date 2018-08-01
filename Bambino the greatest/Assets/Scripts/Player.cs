@@ -23,6 +23,8 @@ public class Player : MonoBehaviour
     bool jumpRequest = false;
     List<Collider2D> groundTouched = new List<Collider2D>();
 
+    private float horizontalInput = 0;
+
 
     void Awake()
     {
@@ -35,10 +37,11 @@ public class Player : MonoBehaviour
         {
             jumpRequest = true;
         }
-        if(groundTouched.Count > 0)
+        if(IsGrounded())
         {
             JumpReset();
         }
+        horizontalInput = Input.GetAxisRaw("Horizontal");
     }
 
     private void FixedUpdate()
@@ -53,32 +56,24 @@ public class Player : MonoBehaviour
             Jump();
             jumpRequest = false;
         }
-        Move(Input.GetAxisRaw("Horizontal"));
-    }
-
-    private void LateUpdate()
-    {
+        Move(horizontalInput);
     }
 
     private void Move(float input)
     {
-        float movement = 0;
-        if (input != 0)
+        if(input == 0)
         {
-            float actuallVelocityMagnitude = Math.Abs(myRigidBody.velocity.x);
-            if (actuallVelocityMagnitude < maxMovementVelocity ||
-                (!IsGrounded() && Math.Sign(myRigidBody.velocity.x) != Math.Sign(input)))
+            if (IsGrounded())
             {
-                float movementPowerDivider = actuallVelocityMagnitude < 1 ? 1f : actuallVelocityMagnitude / 3;
-                movement = input * groundMovementVelocity / movementPowerDivider;
-                myRigidBody.AddForce(new Vector2(movement, 0));
+                myRigidBody.velocity = new Vector2(0, myRigidBody.velocity.y);
             }
         }
         else
         {
-            if (IsGrounded()) myRigidBody.velocity = new Vector2(0, myRigidBody.velocity.y);
-        }
+            if (Math.Abs(myRigidBody.velocity.x) < groundMovementVelocity || Math.Sign(myRigidBody.velocity.x) != Math.Sign(input))
+                myRigidBody.AddForce(new Vector2(input * airMovementVelocity, 0));
 
+        }
     }
 
     private void Jump()
@@ -93,8 +88,7 @@ public class Player : MonoBehaviour
 
     private bool IsGrounded()
     {
-        if (actuallJumpHeight > 0) return false;
-        else return true;
+        return groundTouched.Count > 0;
     }
 
     private void JumpReset()

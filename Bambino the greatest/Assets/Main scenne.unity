@@ -202,8 +202,8 @@ MonoBehaviour:
   jumpYVelocity: 90
   maxJumpHeight: 9
   fallMultiplier: 3
-  groundMovementVelocity: 50
-  airMovementVelocity: 1
+  groundMovementVelocity: 5
+  airMovementVelocity: 20
   movementRatioPerFrame: 1
   maxMovementVelocity: 10
 --- !u!61 &1107803484
@@ -413,7 +413,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1680920260}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: c526c983a9a8d78419ffd154c6879478, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
