@@ -95,6 +95,7 @@ public class Player : MonoBehaviour
     {
         actuallJumpHeight = 0;
         myRigidBody.gravityScale = 1;
+        myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, 0);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
